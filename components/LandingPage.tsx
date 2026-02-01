@@ -184,23 +184,26 @@ export default function LandingPage() {
     const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success'>('idle');
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        setFormStatus('sending');
-        setErrorMsg(null);
 
-        try {
-            const { data, error } = await supabase.functions.invoke('send-contact-email', {
-                body: { name, email }
-            });
+        // Prepare the WhatsApp message
+        const phoneNumber = "56948950169";
+        const message = `¡Hola! Me llamo ${name} y quiero solicitar mi acceso a Ads Hub Pro. Mi correo electrónico es: ${email}`;
 
-            if (error) throw error;
-            setFormStatus('success');
-        } catch (error: any) {
-            console.error('Error sending request:', error);
-            setErrorMsg('Hubo un error al enviar tu solicitud por correo. Por favor intenta de nuevo.');
-            setFormStatus('idle');
-        }
+        // Encode the message for the URL
+        const encodedMessage = encodeURIComponent(message);
+
+        // WhatsApp link
+        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+
+        // Set success state and redirect
+        setFormStatus('success');
+
+        // Redirect to WhatsApp after a brief delay so they see the success message
+        setTimeout(() => {
+            window.open(whatsappUrl, '_blank');
+        }, 1000);
     };
 
     return (
