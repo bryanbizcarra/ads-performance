@@ -187,17 +187,18 @@ export default function LandingPage() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setFormStatus('sending');
+        setErrorMsg(null);
 
         try {
-            const { error } = await supabase
-                .from('contact_requests')
-                .insert([{ full_name: name, email: email }]);
+            const { data, error } = await supabase.functions.invoke('send-contact-email', {
+                body: { name, email }
+            });
 
             if (error) throw error;
             setFormStatus('success');
-        } catch (error) {
+        } catch (error: any) {
             console.error('Error sending request:', error);
-            setErrorMsg('Hubo un error al enviar tu solicitud. Por favor intenta de nuevo.');
+            setErrorMsg('Hubo un error al enviar tu solicitud por correo. Por favor intenta de nuevo.');
             setFormStatus('idle');
         }
     };

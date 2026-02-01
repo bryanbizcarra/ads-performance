@@ -4,6 +4,7 @@ import { AuthProvider } from './context/AuthContext';
 import LandingPage from './components/LandingPage';
 import Dashboard from './components/Dashboard';
 import Login from './components/Login';
+import ResetPassword from './components/ResetPassword';
 import ProtectedRoute from './components/ProtectedRoute';
 
 const App = () => {
@@ -13,6 +14,7 @@ const App = () => {
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route
             path="/dashboard"
             element={
